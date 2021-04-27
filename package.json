@@ -1,0 +1,26 @@
+{
+  "name": "amm-types",
+  "version": "1.0.0",
+  "description": "AMM types for Sienna Swap",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SiennaNetwork/amm-types.git"
+  },
+  "author": "John Doe",
+  "license": "MIT",
+  "private": false,
+  "bugs": {
+    "url": "https://github.com/SiennaNetwork/amm-types/issues"
+  },
+  "homepage": "https://github.com/SiennaNetwork/amm-types#readme",
+  "dependencies": {
+    "secretjs": "^0.11.0"
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
