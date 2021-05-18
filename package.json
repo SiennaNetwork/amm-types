@@ -1,6 +1,6 @@
 {
   "name": "amm-types",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "AMM types for Sienna Swap",
   "main": "index.ts",
   "scripts": {
@@ -22,5 +22,8 @@
   },
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  }
 }

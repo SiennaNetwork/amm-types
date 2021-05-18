@@ -1,7 +1,8 @@
 import {
     Address, TokenPair, IdoInitConfig, Pagination, TokenPairAmount,
     Decimal, Uint128, ContractInfo, get_token_type, TypeOfToken,
-    TokenInfo, ViewingKey, TokenTypeAmount, Exchange
+    TokenInfo, ViewingKey, TokenTypeAmount, Exchange, Allowance,
+    ExchangeRate, PairInfo, ClaimSimulationResult
 } from './types'
 import { ExecuteResult, SigningCosmWasmClient, CosmWasmClient } from 'secretjs'
 
@@ -16,25 +17,27 @@ export interface Fee {
     readonly gas: Uint128
 }
 
-export interface GetExchangePairResponse {
+/*
+interface GetExchangePairResponse {
     get_exchange_pair: {
         pair: TokenPair;
     }
 }
+*/
 
-export interface GetExchangeAddressResponse {
+interface GetExchangeAddressResponse {
     get_exchange_address: {
         address: Address;
     }
 }
 
-export interface ListIdosResponse {
+interface ListIdosResponse {
     list_idos: {
         idos: Address[];
     }
 }
 
-export interface ListExchangesResponse {
+interface ListExchangesResponse {
     list_exchanges: {
         exchanges: Exchange[];
     }
@@ -145,15 +148,15 @@ export class FactoryContract extends SmartContract {
     }
 }
 
-export interface GetPairInfoResponse {
+interface GetPairInfoResponse {
     pair_info: PairInfo
 }
 
-export interface GetFactoryInfoResponse {
+interface GetFactoryInfoResponse {
     factory_info: ContractInfo
 }
 
-export interface GetPoolResponse {
+interface GetPoolResponse {
     pool: TokenPairAmount
 }
 
@@ -161,11 +164,6 @@ export interface SwapSimulationResponse {
     return_amount: Uint128,
     spread_amount: Uint128,
     commission_amount: Uint128
-}
-
-export interface PairInfo {
-    pair: TokenPair,
-    liquidity_token: ContractInfo
 }
 
 export class ExchangeContract extends SmartContract {
@@ -256,26 +254,14 @@ export class ExchangeContract extends SmartContract {
     }
 }
 
-export interface GetAllowanceResponse {
+interface GetAllowanceResponse {
     allowance: Allowance
 }
 
-export interface GetExchangeRateResponse {
-    rate: Uint128,
-    denom: string
-}
-
-export interface GetBalanceResponse {
+interface GetBalanceResponse {
     balance: {
         amount: Uint128
     }
-}
-
-export interface Allowance {
-    spender: Address,
-    owner: Address,
-    allowance: Uint128,
-    expiration?: number | null
 }
 
 export class Snip20Contract extends SmartContract {
@@ -344,7 +330,7 @@ export class Snip20Contract extends SmartContract {
         return result as TokenInfo
     }
 
-    get_exchange_rate(): GetExchangeRateResponse {
+    get_exchange_rate(): ExchangeRate {
         /*
         const msg = {
             exchange_rate: { }
@@ -414,6 +400,83 @@ export class Snip20Contract extends SmartContract {
                 recipient,
                 amount,
                 padding
+            }
+        }
+
+        if (fee === undefined) {
+            fee = create_fee('200000')
+        }
+
+        return await this.signing_client.execute(this.address, msg, undefined, undefined, fee)
+    }
+}
+
+interface ClaimSimulationResponse {
+    claim_simulation: ClaimSimulationResult;
+}
+
+export class RewardsContract extends SmartContract {
+    constructor(
+        readonly address: Address,
+        readonly signing_client: SigningCosmWasmClient,
+        readonly client?: CosmWasmClient | undefined
+    ) {
+        super(address, signing_client, client)
+    }
+
+    async claim(lp_tokens: Address[], fee?: Fee | undefined): Promise<ExecuteResult> {
+        const msg = {
+            claim: {
+                lp_tokens
+            }
+        }
+
+        if (fee === undefined) {
+            fee = create_fee('200000')
+        }
+
+        return await this.signing_client.execute(this.address, msg, undefined, undefined, fee)
+    }
+
+    async claim_simulation(
+        address: Address,
+        viewing_key: ViewingKey,
+        current_time_secs: number,
+        lp_tokens: Address[]
+    ): Promise<ClaimSimulationResult> {
+        let msg = {
+            claim_simulation: {
+                address,
+                current_time: current_time_secs,
+                lp_tokens,
+                viewing_key
+            }
+        };
+
+        let result = await this.query_client().queryContractSmart(this.address, msg) as ClaimSimulationResponse;
+        return result.claim_simulation;
+    }
+
+    async lock_tokens(amount: Uint128, lp_token: Address, fee?: Fee | undefined): Promise<ExecuteResult> {
+        let msg = {
+            lock_tokens: {
+                amount,
+                lp_token
+            }
+        }
+
+        if (fee === undefined) {
+            fee = create_fee('200000')
+        }
+
+        return await this.signing_client.execute(this.address, msg, undefined, undefined, fee)
+    }
+
+    async retrieve_tokens(amount: Uint128, lp_token: Address, fee?: Fee | undefined): Promise<ExecuteResult> {
+        let msg = {
+            retrieve_tokens: {
+                amount,
+                lp_token
             }
         }
 

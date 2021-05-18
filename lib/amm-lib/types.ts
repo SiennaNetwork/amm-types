@@ -54,6 +54,11 @@ export interface Exchange {
     address: Address
 }
 
+export interface PairInfo {
+    pair: TokenPair,
+    liquidity_token: ContractInfo
+}
+
 export class IdoInitConfig {
     constructor(
         /**
@@ -119,9 +124,48 @@ export function get_token_type(token: TokenType): TypeOfToken {
     return TypeOfToken.Custom
 }
 
-/***********************************************************************************
- * The types below are used in integration tests only and are not needed by the UI.*
- **********************************************************************************/
+export interface Allowance {
+    spender: Address,
+    owner: Address,
+    allowance: Uint128,
+    expiration?: number | null
+}
+
+export interface ExchangeRate {
+    rate: Uint128,
+    denom: string
+}
+
+export type ClaimError =
+    | {
+        type: "pool_empty";
+    }
+    | {
+        type: "account_zero_locked";
+    }
+    | {
+        type: "account_zero_reward";
+    }
+    | {
+        /**
+         * In Unix seconds.
+         */
+        time_to_wait: number;
+        type: "early_claim";
+    };
+
+export interface ClaimSimulationResult {
+    total_rewards_amount: Uint128;
+    actual_claimed: Uint128;
+    results: ClaimResult[];
+}
+
+export interface ClaimResult {
+    error?: ClaimError | null;
+    lp_token_addr: Address;
+    reward_amount: Uint128;
+    success: boolean;
+}
 
 export class ContractInfo {
     constructor(
