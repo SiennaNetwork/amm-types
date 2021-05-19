@@ -1,6 +1,6 @@
 {
   "name": "amm-types",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "AMM types for Sienna Swap",
   "main": "index.ts",
   "scripts": {

@@ -136,6 +136,37 @@ export interface ExchangeRate {
     denom: string
 }
 
+export interface RewardPool {
+    lp_token: ContractInfo;
+    /**
+     * The reward amount allocated to this pool.
+     */
+    share: number;
+    /**
+     * Total amount locked by all participants.
+     */
+    size: number;
+}
+
+export interface RewardsAccount {
+    /**
+     * The address of the LP token that this account is for.
+     */
+    lp_token_addr: Address;
+    /**
+     * The owner of this account.
+     */
+    owner: Address;
+    /**
+     * The last time that the user claimed their rewards.
+     */
+    last_claimed: number;
+    /**
+     * The amount of LP tokens the owner has locked into this contract.
+     */
+    locked_amount: number;
+}
+
 export type ClaimError =
     | {
         type: "pool_empty";
