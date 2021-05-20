@@ -1,5 +1,5 @@
-import * as contract from "./lib/amm-lib/contract"
-import * as helper from "./lib/amm-lib/helper"
-import * as amTypes from "./lib/amm-lib/types"
+import * as contract from "./lib/contract"
+import * as helper from "./lib/helper"
+import * as types from "./lib/types"
 
-export default { contract, helper, amTypes }
+export default { contract, helper, types }
