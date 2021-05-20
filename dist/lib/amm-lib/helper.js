@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.token_type_to_asset = exports.asset_to_token_type = void 0;
-var types_1 = require("./types");
+const types_1 = require("./types");
 function asset_to_token_type(asset) {
     if ('token' in asset) {
         return {
@@ -20,7 +20,7 @@ function asset_to_token_type(asset) {
 exports.asset_to_token_type = asset_to_token_type;
 function token_type_to_asset(type) {
     if (types_1.get_token_type(type) === types_1.TypeOfToken.Native) {
-        var denom = type;
+        const denom = type;
         return {
             type: 'native_token',
             native_token: {
@@ -29,7 +29,7 @@ function token_type_to_asset(type) {
         };
     }
     else {
-        var tokenObj = type;
+        const tokenObj = type;
         return {
             type: 'token',
             token: {
@@ -41,4 +41,3 @@ function token_type_to_asset(type) {
     }
 }
 exports.token_type_to_asset = token_type_to_asset;
-//# sourceMappingURL=helper.js.map

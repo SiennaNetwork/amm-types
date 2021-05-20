@@ -2,8 +2,9 @@
   "name": "amm-types",
   "version": "1.0.3",
   "description": "AMM types for Sienna Swap",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
