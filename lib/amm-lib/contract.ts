@@ -2,7 +2,8 @@ import {
     Address, TokenPair, IdoInitConfig, Pagination, TokenPairAmount,
     Decimal, Uint128, ContractInfo, get_token_type, TypeOfToken,
     TokenInfo, ViewingKey, TokenTypeAmount, Exchange, Allowance,
-    ExchangeRate, PairInfo, ClaimSimulationResult
+    ExchangeRate, PairInfo, ClaimSimulationResult, RewardsAccount,
+    RewardPool
 } from './types'
 import { ExecuteResult, SigningCosmWasmClient, CosmWasmClient } from 'secretjs'
 
@@ -415,6 +416,14 @@ interface ClaimSimulationResponse {
     claim_simulation: ClaimSimulationResult;
 }
 
+interface GetAccountsResponse {
+    accounts: RewardsAccount[];
+}
+
+interface GetPoolsResponse {
+    pools: RewardPool[];
+}
+
 export class RewardsContract extends SmartContract {
     constructor(
         readonly address: Address,
@@ -485,6 +494,30 @@ export class RewardsContract extends SmartContract {
         }
 
         return await this.signing_client.execute(this.address, msg, undefined, undefined, fee)
+    }
+
+    async get_pools(): Promise<RewardPool[]> {
+        const msg = 'pools' as unknown as object
+
+        let result = await this.query_client().queryContractSmart(this.address, msg) as GetPoolsResponse;
+        return result.pools;
+    }
+
+    async get_accounts(
+        address: Address,
+        lp_tokens: Address[],
+        viewing_key: ViewingKey
+    ): Promise<RewardsAccount[]> {
+        let msg = {
+            accounts: {
+                address,
+                lp_tokens,
+                viewing_key
+            }
+        }
+
+        let result = await this.query_client().queryContractSmart(this.address, msg) as GetAccountsResponse;
+        return result.accounts;
     }
 }
 
