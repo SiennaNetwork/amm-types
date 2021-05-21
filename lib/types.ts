@@ -169,12 +169,24 @@ export interface RewardsAccount {
 
 export type ClaimError =
     | {
+        /**
+         * Occurs when the rewards pool is currently empty.
+         */
         type: "pool_empty";
     }
     | {
+        /**
+         * Occurs when the user has no tokens locked in this pool. 
+         * In practice, this can occur when a wrong address was provided to the query.
+         */
         type: "account_zero_locked";
     }
     | {
+        /**
+         * It is possible for the user's share to be so little, that
+         * the actual reward amount of rewards calculated to be zero.
+         * However, it is highly unlikely in practice.
+         */
         type: "account_zero_reward";
     }
     | {
@@ -182,6 +194,9 @@ export type ClaimError =
          * In Unix seconds.
          */
         time_to_wait: number;
+        /**
+         * Occurs when the user tries to claim earlier than the designated claim interval.
+         */
         type: "early_claim";
     };
 
