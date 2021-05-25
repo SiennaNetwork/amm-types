@@ -210,7 +210,7 @@ export interface ClaimResult {
     error?: ClaimError | null;
     lp_token_addr: Address;
     reward_amount: Uint128;
-    rewards_per_day: Uint128;
+    reward_per_portion: Uint128;
     success: boolean;
 }
 
