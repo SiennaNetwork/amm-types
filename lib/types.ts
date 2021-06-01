@@ -55,8 +55,12 @@ export interface Exchange {
 }
 
 export interface PairInfo {
-    pair: TokenPair,
-    liquidity_token: ContractInfo
+    amount_0: Uint128;
+    amount_1: Uint128;
+    factory: ContractInfo;
+    liquidity_token: ContractInfo;
+    pair: TokenPair;
+    total_liquidity: Uint128;
 }
 
 export class IdoInitConfig {

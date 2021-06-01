@@ -153,14 +153,6 @@ interface GetPairInfoResponse {
     pair_info: PairInfo
 }
 
-interface GetFactoryInfoResponse {
-    factory_info: ContractInfo
-}
-
-interface GetPoolResponse {
-    pool: TokenPairAmount
-}
-
 export interface SwapSimulationResponse {
     return_amount: Uint128,
     spread_amount: Uint128,
@@ -228,20 +220,6 @@ export class ExchangeContract extends SmartContract {
 
         const result = await this.query_client().queryContractSmart(this.address, msg) as GetPairInfoResponse
         return result.pair_info
-    }
-
-    async get_factory_info(): Promise<ContractInfo> {
-        const msg = 'factory_info' as unknown as object
-
-        const result = await this.query_client().queryContractSmart(this.address, msg) as GetFactoryInfoResponse
-        return result.factory_info
-    }
-
-    async get_pool(): Promise<TokenPairAmount> {
-        const msg = 'pool' as unknown as object
-
-        const result = await this.query_client().queryContractSmart(this.address, msg) as GetPoolResponse
-        return result.pool
     }
 
     async simulate_swap(amount: TokenTypeAmount): Promise<SwapSimulationResponse> {
