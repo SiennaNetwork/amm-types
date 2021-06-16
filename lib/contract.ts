@@ -18,6 +18,14 @@ export interface Fee {
     readonly gas: Uint128
 }
 
+export interface FactoryConfig {
+    exchange_settings: ExchangeSettings;
+    ido_contract: ContractInstantiationInfo;
+    lp_token_contract: ContractInstantiationInfo;
+    pair_contract: ContractInstantiationInfo;
+    snip20_contract: ContractInstantiationInfo;
+}
+
 interface GetExchangeAddressResponse {
     get_exchange_address: {
         address: Address;
@@ -34,6 +42,10 @@ interface ListExchangesResponse {
     list_exchanges: {
         exchanges: Exchange[];
     }
+}
+
+interface FactoryGetConfigResponse {
+    config: FactoryConfig
 }
 
 function create_coin(amount: Uint128): Coin {
@@ -164,6 +176,15 @@ export class FactoryContract extends SmartContract {
         const result = await this.query_client().queryContractSmart(this.address, msg) as ListExchangesResponse
         return result.list_exchanges.exchanges
     }
+
+    async get_config(): Promise<FactoryConfig> {
+        const msg = {
+            get_config: { }
+        }
+
+        const result = await this.query_client().queryContractSmart(this.address, msg) as FactoryGetConfigResponse
+        return result.config
+    }
 }
 
 interface GetPairInfoResponse {
@@ -194,7 +215,7 @@ export class ExchangeContract extends SmartContract {
         }
 
         if (fee === undefined) {
-            fee = create_fee('320000')
+            fee = create_fee('390000')
         }
 
         const transfer = add_native_balance_pair(amount)
@@ -210,7 +231,7 @@ export class ExchangeContract extends SmartContract {
         }
 
         if (fee === undefined) {
-            fee = create_fee('300000')
+            fee = create_fee('350000')
         }
 
         return await this.signing_client.execute(this.address, msg, undefined, undefined, fee)
@@ -225,7 +246,7 @@ export class ExchangeContract extends SmartContract {
         }
 
         if (fee === undefined) {
-            fee = create_fee('380000')
+            fee = create_fee('450000')
         }
 
         const transfer = add_native_balance(amount)
