@@ -1,5 +1,5 @@
 import {
-    Address, TokenPair, IdoInitConfig, Pagination, TokenPairAmount,
+    Address, TokenPair, TokenSaleConfig, Pagination, TokenPairAmount,
     Decimal, Uint128, get_token_type, TypeOfToken, TokenInfo, ViewingKey,
     TokenTypeAmount, Exchange, Allowance, ExchangeRate, PairInfo,
     ClaimSimulationResult, RewardsAccount, RewardPool, ExchangeSettings, 
@@ -105,10 +105,10 @@ export class FactoryContract extends SmartContract {
         return await this.signing_client.execute(this.address, msg, undefined, undefined, fee)
     }
 
-    async create_ido(info: IdoInitConfig, fee?: Fee | undefined): Promise<ExecuteResult> {
+    async create_ido(config: TokenSaleConfig, fee?: Fee | undefined): Promise<ExecuteResult> {
         const msg = {
             create_ido: {
-                info
+                info: config
             }
         }
 
@@ -191,6 +191,10 @@ interface GetPairInfoResponse {
     pair_info: PairInfo
 }
 
+interface GetVersionResponse {
+    version: number
+}
+
 export interface SwapSimulationResponse {
     return_amount: Uint128,
     spread_amount: Uint128,
@@ -258,6 +262,13 @@ export class ExchangeContract extends SmartContract {
 
         const result = await this.query_client().queryContractSmart(this.address, msg) as GetPairInfoResponse
         return result.pair_info
+    }
+
+    async get_version(): Promise<number> {
+        const msg = 'version' as unknown as object
+
+        const result = await this.query_client().queryContractSmart(this.address, msg) as GetVersionResponse
+        return result.version
     }
 
     async simulate_swap(amount: TokenTypeAmount): Promise<SwapSimulationResponse> {
@@ -528,13 +539,11 @@ export class RewardsContract extends SmartContract {
 
     async get_accounts(
         address: Address,
-        lp_tokens: Address[],
         viewing_key: ViewingKey
     ): Promise<RewardsAccount[]> {
         const msg = {
             accounts: {
                 address,
-                lp_tokens,
                 viewing_key
             }
         }
