@@ -3,7 +3,7 @@ import {
     Decimal, Uint128, get_token_type, TypeOfToken, TokenInfo, ViewingKey,
     TokenTypeAmount, Exchange, Allowance, ExchangeRate, PairInfo,
     ClaimSimulationResult, RewardsAccount, RewardPool, ExchangeSettings, 
-    ContractInstantiationInfo
+    ContractInstantiationInfo, PoolContractInfo
 } from './types'
 import { ExecuteResult, SigningCosmWasmClient, CosmWasmClient } from 'secretjs'
 
@@ -550,6 +550,27 @@ export class RewardsContract extends SmartContract {
 
         const result = await this.query_client().queryContractSmart(this.address, msg) as GetTotalRewardsSupply;
         return result.total_rewards_supply.amount;
+    }
+}
+
+interface GetPoolsResponse {
+    pools: PoolContractInfo[];
+}
+
+export class RewardsFactoryContract extends SmartContract {
+    constructor(
+        readonly address: Address,
+        readonly signing_client: SigningCosmWasmClient,
+        readonly client?: CosmWasmClient | undefined
+    ) {
+        super(address, signing_client, client)
+    }
+
+    async get_pools(): Promise<PoolContractInfo[]> {
+        const msg = 'pools' as unknown as object
+
+        const result = await this.query_client().queryContractSmart(this.address, msg) as GetPoolsResponse;
+        return result.pools;
     }
 }
 
