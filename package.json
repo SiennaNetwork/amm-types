@@ -1,6 +1,6 @@
 {
   "name": "amm-types",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "AMM types for Sienna Swap",
   "main": "dist/index.js",
   "scripts": {
@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/SiennaNetwork/amm-types#readme",
   "dependencies": {
-    "secretjs": "^0.11.0"
+    "secretjs": "^0.11.0",
+    "@waiting/base64": "^4.2.9"
   },
   "exclude": [
     "node_modules"
