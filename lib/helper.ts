@@ -1,5 +1,5 @@
 import { NativeToken as UINativeToken, Token } from './other'
-import { TokenType, get_token_type, TypeOfToken, NativeToken as SNativeToken, CustomToken as SCustomToken } from "./types"
+import { TokenType, get_token_type, TypeOfToken, NativeToken as SNativeToken, CustomToken as SCustomToken } from "./core"
 
 export function asset_to_token_type(asset: UINativeToken | Token): TokenType {
     if ('token' in asset) {
