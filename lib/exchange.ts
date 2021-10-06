@@ -80,7 +80,7 @@ export class ExchangeContract extends SmartContract {
             const msg = {
                 swap: {
                     offer: amount,
-                    recipient,
+                    to: recipient,
                     expected_return
                 }
             }
@@ -95,7 +95,7 @@ export class ExchangeContract extends SmartContract {
 
         const msg = {
             swap: {
-                recipient,
+                to: recipient,
                 expected_return
             }
         }
