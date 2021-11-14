@@ -1,9 +1,16 @@
 import { b64encode } from "@waiting/base64";
 
 export type Uint128 = string;
-export type Address = string;
-export type TokenType = CustomToken | NativeToken;
+export type Uint256 = string;
 export type Decimal = string;
+
+export type Moment = number;
+export type Duration = number;
+
+export type Address = string;
+
+export type TokenType = CustomToken | NativeToken;
+
 /**
  * Base64 encoded
  */
