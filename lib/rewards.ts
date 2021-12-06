@@ -1,10 +1,14 @@
 import {
-  Address, Uint128, Uint256, Fee, create_fee, ContractInfo, ViewingKey, Moment, Duration
+    Address, Uint128, Uint256, Fee,
+    create_fee, ContractInfo, ViewingKey
 } from './core'
 
 import { SmartContract } from './contract'
 
 import { ExecuteResult, SigningCosmWasmClient, CosmWasmClient } from 'secretjs'
+
+export type Moment = number;
+export type Duration = number;
 
 /**
  * Reward pool configuration
